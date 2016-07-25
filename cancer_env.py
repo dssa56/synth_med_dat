@@ -20,6 +20,10 @@ def cancer_t_prob(time, code, stt):
     return can_prob
 
 
+def mname(self, arg):
+    pass
+
+
 def cancer_c_prob(code, stt):
     can_prob = (
         can_stats['all'][can_stats.icd == code][can_stats.sex == 'M'].iloc[0]
