@@ -59,7 +59,7 @@ for sex in rd.keys():
 
         condition.verificationStatus = 'confirmed'
 
-        risk = generate_risk(record[0][0], reference, pat_identifier)
+        risk = generate_risk(record[0][0], condition.patient, pat_identifier)
 
         json.dump(risk.as_json(),
                   open(qpath+risk.identifier.value+'.json', 'w'))
