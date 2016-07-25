@@ -7,7 +7,7 @@ no_sex = json.load(open('no_sex.json'))
 
 class Birth(Event):
     def __init__(self,  state, lt):
-        consequences = ['C34', 'C18', 'C61', 'C81', 'C50']
+        consequences = ['C34', 'C16', 'C64', 'C25', 'C50']
 
         self.consequences = ([c for c in consequences
                               if c not in no_sex['no_f']]
@@ -23,8 +23,8 @@ class Birth(Event):
 
 
 ev_dict = {'B': Birth,
-           'C18': Event,
+           'C16': Event,
            'C34': Event,
-           'C50': Event,
-           'C61': Event,
-           'C81': Event}
+           'C64': Event,
+           'C25': Event,
+           'C50': Event}
