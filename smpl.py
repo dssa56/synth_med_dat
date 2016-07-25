@@ -3,6 +3,7 @@ from ev_cl import State
 from collections import defaultdict
 import json
 import names
+from generate_risk import generate_risk
 import models.humanname as hn
 import models.patient as pt
 import models.condition as cnd
@@ -17,6 +18,7 @@ icd_10 = json.load(open('icd.json'))
 
 patpath = '/Users/lawrence.phillips/synth_dat/generated_data/patients/'
 conpath = '/Users/lawrence.phillips/synth_dat/generated_data/conditions/'
+qpath = '/Users/lawrence.phillips/synth_dat/generated_data/questionnaires/'
 
 rd = {'M': defaultdict(list), 'F': defaultdict(list)}
 
@@ -57,6 +59,10 @@ for sex in rd.keys():
 
         condition.verificationStatus = 'confirmed'
 
+        risk = generate_risk(record[0][0], reference, pat_identifier)
+
+        json.dump(risk.as_json(),
+                  open(qpath+risk.identifier.value+'.json', 'w'))
         json.dump(patient.as_json(),
                   open(patpath+pat_identifier.value+'.json', 'w'))
         json.dump(condition.as_json(),
