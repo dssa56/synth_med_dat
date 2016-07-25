@@ -31,6 +31,7 @@ for sex in rd.keys():
         cond_identifier = idn.Identifier({'value': sex+'c'+str(i)})
         name = hn.HumanName()
         patient = pt.Patient()
+        patient.identifier = [pat_identifier]
         name.given = [names.get_first_name(gender='male'
                                            if sex == 'M' else 'female')]
         name.family = [names.get_last_name()]
@@ -48,6 +49,7 @@ for sex in rd.keys():
             events = [ev_dict[c[0]](state, n_years) for c in cns]
 
         condition = cnd.Condition()
+        condition.identifier = [cond_identifier]
         set_dates(record[0][1], condition, patient)
         reference = {'reference': patpath+pat_identifier.value+'.json'}
         condition.patient = FHIRReference(reference)
@@ -59,7 +61,7 @@ for sex in rd.keys():
 
         condition.verificationStatus = 'confirmed'
 
-        risk = generate_risk(record[0][0], condition.patient, pat_identifier)
+        risk = generate_risk(record[0][0], condition.patient, patient)
 
         json.dump(risk.as_json(),
                   open(qpath+risk.identifier.value+'.json', 'w'))

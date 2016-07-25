@@ -6,11 +6,11 @@ import models.identifier as idn
 rdat = pandas.read_csv('risk.csv')
 
 
-def generate_risk(diagnosis, pref, pid):
-    factors = rdat[diagnosis].tolist()
+def generate_risk(diagnosis, pref, pat):
+    factors = rdat[diagnosis][rdat.sex == pat.gender].tolist()
     risks = [np.random.choice([1, 0], p=[factors[i]/100, 1 - factors[i]/100])
              for i, _ in enumerate(factors)]
-    print(risks)
+    print(rdat.exposure.tolist())
     q = [{'text': rdat.exposure.tolist()[i],
           'answer': [{'valueBoolean': True if risks[i] else False}]}
          for i in range(len(factors))]
@@ -19,5 +19,6 @@ def generate_risk(diagnosis, pref, pid):
     response.status = 'completed'
     response.group = qr.QuestionnaireResponseGroup({'question': q})
     response.source = pref
-    response.identifier = idn.Identifier({'value': 'q'+pid.value})
+    response.identifier = idn.Identifier({'value':
+                                          'q'+pat.identifier[0].value})
     return response
