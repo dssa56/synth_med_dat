@@ -41,7 +41,13 @@ def get_patient_genotype(age):
     norm = sum(probs)
     probs = [p/norm for p in probs]
 
-    pop_probs = [1/500, 1/500, 1/500, 1/500, 498/500, 498/500]
+    pop_probs = [0.1139*1/500,
+                 (1 - 0.1139)*1/500,
+                 0.1139*1/500,
+                 (1 - 0.1139)*1/500,
+                 0.1139*498/500,
+                 (1 - 0.1139)*498/500]
+
     norm = sum(pop_probs)
     pop_probs = [p/norm for p in pop_probs]
 
