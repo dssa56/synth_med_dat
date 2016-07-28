@@ -65,3 +65,43 @@ def get_parent_genotypes(child_genotype):
     probs = [p/norm for p in probs]
     return possibilities[np.random.choice(len(possibilities),
                                           p=probs)]
+
+
+def get_child_genotype(parent_genotypes):
+    from_mum = [parent_genotypes[0][np.random.choice(2)][0],
+                parent_genotypes[0][np.random.choice(2)][1]]
+    from_dad = [parent_genotypes[0][np.random.choice(2)][0],
+                parent_genotypes[0][np.random.choice(2)][1]]
+    return (from_mum, from_dad)
+
+
+def build_family_genotype(age):
+    g = {}
+    possibilities = [(pgmm, pgmf) for pgmm in genotypes for pgmf in genotypes]
+    pop_prs = [genotype_pops[poss[0]]*genotype_pops[poss[1]]
+               for poss in possibilities]
+    g['pat'] = get_patient_genotype(age)
+    g['mum'], g['dad'] = get_parent_genotypes(g['pat'])
+    g['gmm'], g['gfm'] = get_parent_genotypes(g['mum'])
+    g['gmp'], g['gfp'] = get_parent_genotypes(g['dad'])
+    for i in range(np.random.choice(3)):
+        g['mum_sib_' + str(i)] = get_child_genotype((g['gmm'], g['gfm']))
+        for j in range(np.random.choice(3)):
+            g['mum_sib_' + str(i) + '_daught_' + str(j)] = (
+                get_child_genotype((g['mum_sib_' + str(i)],
+                                   possibilities[
+                                    np.random.choice(len(possibilities),
+                                                     p=pop_prs)])))
+
+    for i in range(np.random.choice(3)):
+        g['dad_sib_' + str(i)] = get_child_genotype((g['gmm'], g['gfm']))
+        for j in range(np.random.choice(3)):
+            g['dad_sib_' + str(i) + '_daught_' + str(j)] = (
+                get_child_genotype((g['dad_sib_' + str(i)],
+                                   possibilities[
+                                    np.random.choice(len(possibilities),
+                                                     p=pop_prs)])))
+    for i in range(np.random.choice(3)):
+        g['sis_' + str(i)] = get_child_genotype((g['mum'], g['dad']))
+
+    return g
