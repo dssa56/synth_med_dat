@@ -10,7 +10,6 @@ def generate_risk(diagnosis, pref, pat):
     factors = rdat[diagnosis][rdat.sex == pat.gender].tolist()
     risks = [np.random.choice([1, 0], p=[factors[i]/100, 1 - factors[i]/100])
              for i, _ in enumerate(factors)]
-    print(rdat.exposure.tolist())
     q = [{'text': rdat.exposure.tolist()[i],
           'answer': [{'valueBoolean': True if risks[i] else False}]}
          for i in range(len(factors))]

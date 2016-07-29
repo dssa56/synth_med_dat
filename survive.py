@@ -30,6 +30,8 @@ for k in sur_d.keys():
 def get_patient_genotype(age):
     if age < 30:
         age = 30
+    if age > 70:
+        age = 70
 
     age = age // 10 - 3
     probs = [genotype_pops[gn]*event_probs[gn][age]
@@ -169,7 +171,6 @@ def build_family_phenotype(fmly_gnt, age):
         if np.random.choice(2, p=[1 - can_prob, can_prob]):
             probs = [p/can_prob
                      for p in event_probs[(expr1, expr2)][:k_age]]
-            print(probs, k_age)
             can_age = np.random.choice(k_age, p=probs)
             can_age = (can_age + 3)*10 + np.random.choice(10)
             p[k] = ('BC', can_age)

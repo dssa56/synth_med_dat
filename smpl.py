@@ -3,6 +3,7 @@ from ev_cl import State
 from collections import defaultdict
 import json
 import names
+from make_fam_hist import make_fam_hist
 from generate_risk import generate_risk
 import models.humanname as hn
 import models.patient as pt
@@ -11,14 +12,25 @@ import models.identifier as idn
 import models.codeableconcept as cc
 from make_date import set_dates
 from models.fhirreference import FHIRReference
+import os
+from glob import glob
 
 n_years = 100
-n_records = 5
+n_records = 100
 icd_10 = json.load(open('icd.json'))
 
-patpath = '/Users/lawrence.phillips/synth_dat/generated_data/patients/'
-conpath = '/Users/lawrence.phillips/synth_dat/generated_data/conditions/'
-qpath = '/Users/lawrence.phillips/synth_dat/generated_data/questionnaires/'
+gdpth = '/Users/lawrence.phillips/synth_dat/generated_data/'
+
+paths = {
+    'patpath': gdpth + 'patients/',
+    'conpath': gdpth + 'conditions/',
+    'qpath': gdpth + 'questionnaires/',
+    'fhpath': gdpth + 'family_history/'
+    }
+
+for path in paths.keys():
+    for f in glob(paths[path] + '*.json'):
+        os.remove(f)
 
 rd = {'M': defaultdict(list), 'F': defaultdict(list)}
 
@@ -51,7 +63,12 @@ for sex in rd.keys():
         condition = cnd.Condition()
         condition.identifier = [cond_identifier]
         set_dates(record[0][1], condition, patient)
-        reference = {'reference': patpath+pat_identifier.value+'.json'}
+        reference = {'reference':
+                     paths['patpath']+pat_identifier.value+'.json'}
+
+        if record[0][0] == 'C50':
+            make_fam_hist(record[0][1], reference, pat_identifier)
+
         condition.patient = FHIRReference(reference)
 
         condition.code = cc.CodeableConcept(
@@ -64,11 +81,11 @@ for sex in rd.keys():
         risk = generate_risk(record[0][0], condition.patient, patient)
 
         json.dump(risk.as_json(),
-                  open(qpath+risk.identifier.value+'.json', 'w'))
+                  open(paths['qpath']+risk.identifier.value+'.json', 'w'))
         json.dump(patient.as_json(),
-                  open(patpath+pat_identifier.value+'.json', 'w'))
+                  open(paths['patpath']+pat_identifier.value+'.json', 'w'))
         json.dump(condition.as_json(),
-                  open(conpath+cond_identifier.value+'.json', 'w'))
+                  open(paths['conpath']+cond_identifier.value+'.json', 'w'))
 
 
 json.dump(rd, open('rd.json', 'w'))
