@@ -4,6 +4,7 @@ import json
 
 smf = json.load(open('snomed_fam.json'))
 path = 'generated_data/family_history/'
+fspath = 'generated_data/family_structure/'
 
 
 def make_fam_hist(age, patient, ident):
@@ -61,5 +62,8 @@ def make_fam_hist(age, patient, ident):
             )]
 
             json.dump(hist.as_json(),
-                      open(path+'fh_' + ident.value + str(i) + '.json', 'w'))
+                      open(path + ident.value + str(i) + '.json', 'w'))
             i += 1
+
+        json.dump(famhist,
+                  open(path + ident.value + '.json', 'w'))

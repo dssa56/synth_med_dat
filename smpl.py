@@ -25,7 +25,8 @@ paths = {
     'patpath': gdpth + 'patients/',
     'conpath': gdpth + 'conditions/',
     'qpath': gdpth + 'questionnaires/',
-    'fhpath': gdpth + 'family_history/'
+    'fhpath': gdpth + 'family_history/',
+    'fspath': gdpth + 'family_structure/'
     }
 
 for path in paths.keys():
@@ -40,7 +41,7 @@ for sex in rd.keys():
 
     for i in range(n_records):
         pat_identifier = idn.Identifier({'value': sex+str(i)})
-        cond_identifier = idn.Identifier({'value': sex+'c'+str(i)})
+        cond_identifier = idn.Identifier({'value': sex+str(i)})
         name = hn.HumanName()
         patient = pt.Patient()
         patient.identifier = [pat_identifier]
