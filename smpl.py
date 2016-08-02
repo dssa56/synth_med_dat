@@ -4,6 +4,7 @@ from collections import defaultdict
 import json
 import names
 from make_fam_hist import make_fam_hist
+from make_fam_quest import make_fam_quest
 from generate_risk import generate_risk
 import models.humanname as hn
 import models.patient as pt
@@ -14,6 +15,7 @@ from make_date import set_dates
 from models.fhirreference import FHIRReference
 import os
 from glob import glob
+from survive import build_family_genotype, build_family_phenotype
 
 n_years = 100
 n_records = 100
@@ -26,7 +28,7 @@ paths = {
     'conpath': gdpth + 'conditions/',
     'qpath': gdpth + 'questionnaires/',
     'fhpath': gdpth + 'family_history/',
-    'fspath': gdpth + 'family_structure/'
+    'fqpath': gdpth + 'family_questionnaires/'
     }
 
 for path in paths.keys():
@@ -68,7 +70,14 @@ for sex in rd.keys():
                      paths['patpath']+pat_identifier.value+'.json'}
 
         if record[0][0] == 'C50':
-            make_fam_hist(record[0][1], reference, pat_identifier)
+            genotype = build_family_genotype(record[0][1])
+            famhist = build_family_phenotype(genotype, record[0][1])
+            make_fam_hist(famhist,
+                          reference,
+                          pat_identifier)
+            make_fam_quest(famhist,
+                           reference,
+                           pat_identifier)
 
         condition.patient = FHIRReference(reference)
 
