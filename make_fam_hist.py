@@ -5,46 +5,51 @@ smf = json.load(open('snomed_fam.json'))
 path = 'generated_data/family_history/'
 
 
+def make_rln(k):
+    if k == 'gmm':
+        rln = (
+                {'coding': [{'system': 'SNOMED-CT',
+                             'code': smf['Maternal Grandma']}],
+                 'text': 'Maternal Grandmother'}
+        )
+    elif k == 'gmp':
+        rln = (
+                {'coding': [{'system': 'SNOMED-CT',
+                             'code': smf['Paternal Grandma']}],
+                 'text': 'Paternal Grandmother'}
+        )
+    elif k == 'mum':
+        rln = (
+                {'coding': [{'system': 'SNOMED-CT',
+                             'code': smf['Mother']}],
+                 'text': 'Mother'}
+        )
+    elif 'sib' in k and 'daught' in k:
+        rln = (
+                {'coding': [{'system': 'SNOMED-CT',
+                             'code': smf['Female Cousin']}],
+                 'text': 'Female Cousin'}
+        )
+    elif 'sib' in k:
+        rln = (
+                {'coding': [{'system': 'SNOMED-CT',
+                             'code': smf['Aunt']}],
+                 'text': 'Aunt'}
+        )
+    else:
+        rln = (
+                {'coding': [{'system': 'SNOMED-CT',
+                             'code': smf['Sister']}],
+                 'text': 'Sister'}
+        )
+    return rln
+
+
 def make_fam_hist(famhist, patient, ident):
     i = 0
     for k in famhist.keys():
         if 'BC' in famhist[k]:
-            if k == 'gmm':
-                rln = (
-                        {'coding': [{'system': 'SNOMED-CT',
-                                     'code': smf['Maternal Grandma']}],
-                         'text': 'Maternal Grandmother'}
-                )
-            elif k == 'gmp':
-                rln = (
-                        {'coding': [{'system': 'SNOMED-CT',
-                                     'code': smf['Paternal Grandma']}],
-                         'text': 'Paternal Grandmother'}
-                )
-            elif k == 'mum':
-                rln = (
-                        {'coding': [{'system': 'SNOMED-CT',
-                                     'code': smf['Mother']}],
-                         'text': 'Mother'}
-                )
-            elif 'sib' in k and 'daught' in k:
-                rln = (
-                        {'coding': [{'system': 'SNOMED-CT',
-                                     'code': smf['Female Cousin']}],
-                         'text': 'Female Cousin'}
-                )
-            elif 'sib' in k:
-                rln = (
-                        {'coding': [{'system': 'SNOMED-CT',
-                                     'code': smf['Aunt']}],
-                         'text': 'Aunt'}
-                )
-            else:
-                rln = (
-                        {'coding': [{'system': 'SNOMED-CT',
-                                     'code': smf['Sister']}],
-                         'text': 'Sister'}
-                )
+            rln = make_rln(k)
 
             hist = fmh.FamilyMemberHistory({'status': 'completed',
                                             'patient': patient,
@@ -58,5 +63,5 @@ def make_fam_hist(famhist, patient, ident):
             )]
 
             json.dump(hist.as_json(),
-                      open(path + ident.value + str(i) + '.json', 'w'))
+                      open(path + ident.value + '_' + str(i) + '.json', 'w'))
             i += 1

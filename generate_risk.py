@@ -19,5 +19,5 @@ def generate_risk(diagnosis, pref, pat):
     response.group = qr.QuestionnaireResponseGroup({'question': q})
     response.source = pref
     response.identifier = idn.Identifier({'value':
-                                          'q'+pat.identifier[0].value})
+                                          pat.identifier[0].value})
     return response

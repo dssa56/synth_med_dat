@@ -32,7 +32,7 @@ paths = {
     }
 
 for path in paths.keys():
-    for f in glob(paths[path] + '*.json'):
+    for f in glob(paths[path] + '*'):
         os.remove(f)
 
 rd = {'M': defaultdict(list), 'F': defaultdict(list)}

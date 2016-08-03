@@ -7,15 +7,23 @@ path = '/Users/lawrence.phillips/synth_dat/generated_data/'
 
 
 def make_fam_quest(famhist, patient, idnt):
-    q = [{'text': k,
-          'answer': [{'valueString': str(famhist[k])}]}
+    q = [{'question':
+         [{'text': 'relation',
+           'answer': [{'valueString': k}]},
+          {'text': 'bc_diagnosis?',
+           'answer': [{'valueBoolean':
+                      True if 'BC' in famhist[k][0]
+                      else False}]},
+          {'text': 'age_at_diagnosis' if famhist[k][0] == 'BC' else
+                   'current_age',
+           'answer': [{'valueInteger': famhist[k][1]}]}]}
          for k in famhist.keys()]
 
     response = qr.QuestionnaireResponse(strict=False)
     response.status = 'completed'
-    response.group = qr.QuestionnaireResponseGroup({'question': q})
+    response.group = qr.QuestionnaireResponseGroup({'group': q})
     response.source = FHIRReference(patient)
     response.identifier = idn.Identifier({'value':
-                                          'q'+idnt.value})
+                                          idnt.value})
     json.dump(response.as_json(), open(path + 'family_questionnaires/'
                                        + idnt.value, 'w'))
