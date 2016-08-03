@@ -26,4 +26,4 @@ def make_fam_quest(famhist, patient, idnt):
     response.identifier = idn.Identifier({'value':
                                           idnt.value})
     json.dump(response.as_json(), open(path + 'family_questionnaires/'
-                                       + idnt.value, 'w'))
+                                       + idnt.value + '.json', 'w'))
