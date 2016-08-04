@@ -89,25 +89,29 @@ def build_family_genotype(age):
 
     nmsib = np.random.choice(3)
     for i in range(nmsib):
-        g['mum_sib_' + str(i)] = get_child_genotype((g['gmm'], g['gfm']))
+        sex = ['m', 'f'][np.random.choice(2)]
+        g['mum_sib_' + str(i) + '_' + sex] = (
+                        get_child_genotype((g['gmm'], g['gfm'])))
         g['mum_sib_' + str(i) + '_ptnr'] = (
                         possibilities[np.random.choice(len(possibilities),
                                                        p=pop_prs)])
         for j in range(np.random.choice(3)):
             g['mum_sib_' + str(i) + '_daught_' + str(j)] = (
-                get_child_genotype((g['mum_sib_' + str(i)],
+                get_child_genotype((g['mum_sib_' + str(i) + '_' + sex],
                                     g['mum_sib_' + str(i) + '_ptnr']
                                     )))
 
     ndsib = np.random.choice(3)
     for i in range(ndsib):
-        g['dad_sib_' + str(i)] = get_child_genotype((g['gmm'], g['gfm']))
+        sex = ['m', 'f'][np.random.choice(2)]
+        g['dad_sib_' + str(i) + '_' + sex] = (
+                        get_child_genotype((g['gmm'], g['gfm'])))
         g['dad_sib_' + str(i) + '_ptnr'] = (
                         possibilities[np.random.choice(len(possibilities),
                                                        p=pop_prs)])
         for j in range(np.random.choice(3)):
             g['dad_sib_' + str(i) + '_daught_' + str(j)] = (
-                get_child_genotype((g['dad_sib_' + str(i)],
+                get_child_genotype((g['dad_sib_' + str(i) + '_' + sex],
                                     g['dad_sib_' + str(i) + '_ptnr']
                                     )))
 
@@ -136,20 +140,20 @@ def build_family_phenotype(fmly_gnt, age):
             'gmm': age + 60 - np.random.choice(22),
             'gmp': age + 60 - np.random.choice(22)}
 
-    if n_m_sis:
-        n_m_sis_f = np.random.choice(n_m_sis)
-        for i in range(n_m_sis_f):
-            ages['mum_sib_' + str(i)] = age + 30 - np.random.choice(11)
-        for i in range(n_m_sis - n_m_sis_f):
-            ages['mum_sib_' + str(n_m_sis_f + i) + '_ptnr'] = (
+    for i in range(n_m_sis):
+        try:
+            fmly_gnt['mum_sib_' + str(i) + '_f']
+            ages['mum_sib_' + str(i) + '_f'] = age + 30 - np.random.choice(11)
+        except KeyError:
+            ages['mum_sib_' + str(i) + '_ptnr'] = (
                 age + 30 - np.random.choice(11))
 
-    if n_f_sis:
-        n_f_sis_f = np.random.choice(n_f_sis)
-        for i in range(n_f_sis_f):
-            ages['dad_sib_' + str(i)] = age + 30 - np.random.choice(11)
-        for i in range(n_f_sis - n_f_sis_f):
-            ages['dad_sib_' + str(n_f_sis_f + i) + '_ptnr'] = (
+    for i in range(n_f_sis):
+        try:
+            fmly_gnt['dad_sib_' + str(i) + '_f']
+            ages['dad_sib_' + str(i) + '_f'] = age + 30 - np.random.choice(11)
+        except KeyError:
+            ages['dad_sib_' + str(i) + '_ptnr'] = (
                 age + 30 - np.random.choice(11))
 
     for i in range(len([k for k in fmly_gnt.keys() if 'mum_sib' in k])):
