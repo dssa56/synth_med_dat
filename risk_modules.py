@@ -13,7 +13,7 @@ def gnpr_iter(l, n):
         i += 1
 
 
-def sub_alpha(index, genotype, phenotype):
+def sub_alpha(genotype, phenotype):
     if 'BRCA1' in genotype[0] or 'BRCA1' in genotype[1]:
         expr1 = 'BRCA1'
     elif 'BRCA2' in genotype[0] or 'BRCA2' in genotype[1]:
@@ -38,14 +38,13 @@ def gnt_proba(genotype, parent_genotypes):
     return pm[0]*pm[1]*pf[0]*pf[1]
 
 
-def modifier(n_sub_people, pt):
+def modifier(pt, mdf):
     mod = []
     for gnp in genopairs:
         s = 0
-        for pgt in gnpr_iter(n_sub_people, len(genopairs)):
-            p = 1
+        for pgt in gnpr_iter(len(pt), len(genopairs)):
             for i, gt in enumerate(pgt):
-                p *= gnt_proba(gt, gnp)*sub_alpha(i, gt, pt)
+                p *= gnt_proba(gt, gnp)*sub_alpha(gt, pt[i])*mdf[i]
             s += p
         mod.append[s]
     return mod

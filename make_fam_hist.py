@@ -30,7 +30,7 @@ def make_rln(k):
                              'code': smf['Female Cousin']}],
                  'text': 'Female Cousin'}
         )
-    elif 'sib' in k:
+    elif ('sib' in k and 'f' in k) or 'ptnr' in k:
         rln = (
                 {'coding': [{'system': 'SNOMED-CT',
                              'code': smf['Aunt']}],
