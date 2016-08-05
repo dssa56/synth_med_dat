@@ -142,6 +142,4 @@ def bc_prob(idnt):
     p_can_t = dict((pt[1], sum([sub_alpha(gnt, pt)*p_pat[gnt]
                                for gnt in genotypes]))
                    for pt in pat_pnts)
-    p_can_t = dict((k, p_can_t[k]/sum(p_can_t.values()))
-                   for k in p_can_t.keys())
     return p_can_t
