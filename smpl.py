@@ -17,8 +17,8 @@ import os
 from glob import glob
 from survive import build_family_genotype, build_family_phenotype
 
-n_years = 100
-n_records = 100
+n_years = 75
+n_records = 1000
 icd_10 = json.load(open('icd.json'))
 
 gdpth = '/Users/lawrence.phillips/synth_dat/generated_data/'
