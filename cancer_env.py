@@ -41,3 +41,8 @@ def cancer_c_dist(lc, stt):
     norm = sum(probs)
     probs = [prob/norm for prob in probs]
     return st.rv_discrete(values=(range(len(lc)), probs))
+
+st_dict = {'C16': [st.rv_discrete(values=([0], [1])),
+                   st.rv_discrete(values=([0], [1])),
+                   st.rv_discrete(values=([0, 1], [0.7, 0.3])),
+                   st.rv_discrete(values=([0, 1], [0.3, 0.7]))]}

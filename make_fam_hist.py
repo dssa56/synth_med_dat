@@ -2,7 +2,7 @@ import models.familymemberhistory as fmh
 import json
 
 smf = json.load(open('snomed_fam.json'))
-path = 'generated_data/family_history/'
+path = 'generated_data/family_histories/'
 
 
 def make_rln(k):

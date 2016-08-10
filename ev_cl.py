@@ -1,5 +1,3 @@
-
-
 class Event:
     def __init__(
      self, state, lt, consequences=[], c_distribution=[], t_distributions=[]):
@@ -9,10 +7,13 @@ class Event:
 
     def get_consequences(self):
         if self.consequences:
-            cind = self.c_distribution.rvs()
-            con = self.consequences[cind]
-            t = self.t_distributions[cind].rvs()
-            return (con, t)
+            cns = []
+            for i in range(len(self.c_distribution)):
+                cind = self.c_distribution[i].rvs()
+                con = self.consequences[i][cind]
+                t = self.t_distributions[i][cind].rvs()
+                cns.append((con, int(t)))
+            return cns
 
 
 class State:
