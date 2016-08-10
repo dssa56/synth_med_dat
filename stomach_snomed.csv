@@ -1,0 +1,9 @@
+code,tnm,description
+385316005,T1,Tumor invades lamina propria or submucosa (stomach)
+385320009,T2,Tumor invades muscularis propria (stomach)
+385321008,T3,Tumor invades subserosa (stomach)
+385322001,T4a,Tumor penetrates serosa (visceral peritoneum) without invasion of adjacent structures (stomach)
+385323006,T4b,Tumor invades adjacent structures (stomach)
+385324000,N1,Metastasis in 1 to 6 regional (perigastric) lymph nodes (stomach)
+385325004,N2,Metastasis in 7 to 15 regional (perigastric) lymph nodes (stomach)
+385326003,N3,Metastasis in more than 15 regional (perigastric) lymph nodes (stomach)
