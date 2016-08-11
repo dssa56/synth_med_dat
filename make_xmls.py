@@ -5,8 +5,9 @@ import json
 
 path = '/Users/lawrence.phillips/synth_dat/generated_data/'
 
-extns = ['patients/', 'family_questionnaires/', 'questionnaires/',
-         'conditions/', 'family_history/']
+extns = ['patients/', 'family_questionnaires/', 'risk_questionnaires/',
+         'conditions/', 'family_histories/', 'obersvations/',
+         'diagnostic_reports/']
 
 paths = [path + extn for extn in extns]
 

@@ -17,7 +17,7 @@ def gntype_iter(allowed_gn, n):
 
 def sub_alpha(gntyp, phenotype):
     k_age = phenotype[1] // 10 - 3
-    k_age = k_age + 1 if k_age < 5 else 5
+    k_age = k_age if k_age < 5 else 4
     if 'BRCA1' in gntyp[0] or 'BRCA1' in gntyp[1]:
         expr1 = 'BRCA1'
     elif 'BRCA2' in gntyp[0] or 'BRCA2' in gntyp[1]:
@@ -29,9 +29,10 @@ def sub_alpha(gntyp, phenotype):
     else:
         expr2 = 'N'
     if phenotype[0] == 'BC':
-        return event_probs[(expr1, expr2)][k_age - 1]
+        return event_probs[(expr1, expr2)][k_age]/10
     else:
-        return 1 - sum(event_probs[(expr1, expr2)][:k_age])
+        return (1 - sum(event_probs[(expr1, expr2)][:k_age]) -
+                event_probs[(expr1, expr2)][k_age]*(phenotype[1] % 10)/10)
 
 
 def gnt_proba(gntyp, parent_genotypes):

@@ -56,6 +56,7 @@ def bc_prob(idnt):
 
     m_sib_mods = []
     for sib in m_sib:
+        print(m_sib)
         dstr = re.search(re.compile('(mum_sib_[0-2]).+'), sib).group(1)
         ds = [hd[k] for k in hd.keys() if dstr in k and '_daught_' in k]
         identmod = [dict((gnt, 1) for gnt in genotypes)
@@ -138,6 +139,11 @@ def bc_prob(idnt):
     p_pat = dict((gnt, sum([gnt_proba(gnt, gnp)*p_m_d[gnp]
                             for gnp in genopairs]))
                  for gnt in genotypes)
+
+    norm = sum(p_pat.values())
+
+    for k in p_pat.keys():
+        p_pat[k] = p_pat[k]/norm
 
     p_can_t = dict((pt[1], sum([sub_alpha(gnt, pt)*p_pat[gnt]
                                for gnt in genotypes]))

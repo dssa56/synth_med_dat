@@ -1,19 +1,18 @@
 import json
 import numpy as np
+import random
 
 sur_d = json.load(open('survival.json'))
 
 
 genes = [('BRCA1', 'BRCA2', 'N'), ('Y', 'N')]
 genotypes = [(a, b) for a in genes[0] for b in genes[1]]
+locus_pops = {1: {'BRCA1': 1/500, 'BRCA2': 1/500, 'N': 498/500},
+              2: {'Y': 0.1139, 'N': 1 - 0.1139}}
 
 
-genotype_pops = {('BRCA1', 'Y'): 0.1139*1/500,
-                 ('BRCA1', 'N'): (1 - 0.1139)*1/500,
-                 ('BRCA2', 'Y'): 0.1139*1/500,
-                 ('BRCA2', 'N'): (1 - 0.1139)*1/500,
-                 ('N', 'Y'): 0.1139*498/500,
-                 ('N', 'N'): (1 - 0.1139)*498/500}
+genotype_pops = dict((genotype, locus_pops[1][genotype[0]]
+                     * locus_pops[2][genotype[1]]) for genotype in genotypes)
 
 th = 13.0377
 
@@ -39,11 +38,16 @@ def get_patient_genotype(age):
 
     norm = sum(probs)
     probs = [p/norm for p in probs]
+    gnt = (genotypes[np.random.choice(range(6), p=probs)] +
+           genotypes[np.random.choice(range(6), p=[genotype_pops[genotype]
+                                                   for genotype in genotypes]
+                                      )])
+    locus_1 = random.sample([gnt[0], gnt[2]], 2)
+    locus_2 = random.sample([gnt[1], gnt[3]], 2)
+    copy_1 = (locus_1[0], locus_2[0])
+    copy_2 = (locus_1[1], locus_2[1])
 
-    copy_1 = np.random.choice(range(6), p=probs)
-    copy_2 = np.random.choice(range(6), p=list(genotype_pops.values()))
-
-    return (genotypes[copy_1], genotypes[copy_2])
+    return (copy_1, copy_2)
 
 
 def parent_genotype_prob(child_genotype, parent_genotypes):
@@ -122,18 +126,18 @@ def build_family_genotype(age):
 
 
 def build_family_phenotype(fmly_gnt, age):
-    n_m_sis = np.random.choice(
+    n_m_sis = (
         len([k for k in fmly_gnt.keys()
              if 'mum_sib' in k
              and 'daught' not in k
-             and 'ptnr' not in k]) + 1
+             and 'ptnr' not in k])
     )
 
-    n_f_sis = np.random.choice(
+    n_f_sis = (
         len([k for k in fmly_gnt.keys()
              if 'dad_sib' in k
              and 'daught' not in k
-             and 'ptnr' not in k]) + 1
+             and 'ptnr' not in k])
     )
 
     ages = {'mum': age + 30 - np.random.choice(11),
